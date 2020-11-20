@@ -4,6 +4,8 @@ This is a Rails-based backend for a Health Provider portal to manage and sign Va
 
 The UI is [here](https://github.com/vitorpamplona/healthpassport-provider-portal-ui). 
 
+<img src="./docs/ProviderPortalPreview.png" data-canonical-src="./docs/ProviderPortalPreview.png"/>
+
 ## Behaviour
 
 1. Health Provider Signs UP for the service. 
