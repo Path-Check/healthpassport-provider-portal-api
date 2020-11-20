@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_150904) do
+ActiveRecord::Schema.define(version: 2020_11_20_183509) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
@@ -19,6 +19,18 @@ ActiveRecord::Schema.define(version: 2020_11_20_150904) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "private_key"
     t.string "public_key"
+  end
+
+  create_table "vaccination_programs", force: :cascade do |t|
+    t.string "vaccinator"
+    t.string "brand"
+    t.string "product"
+    t.string "lot"
+    t.string "dose"
+    t.string "route"
+    t.string "signature"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end
