@@ -1,4 +1,4 @@
-# Health Passport Health Provider Portal React UI
+# Health Passport Health Provider Portal Rails Rest API
 
 This is a Rails-based backend for a Health Provider portal to manage and sign Vaccination Certificates. 
 
@@ -41,5 +41,5 @@ Make sure you have everything you need to run a Ruby 2.5 / Rails 6 service.
 Install modules:
 `bundle install`
 
-Start the API on port 3000
+Start the API server
 `rails server `
