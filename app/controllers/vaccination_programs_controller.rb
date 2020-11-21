@@ -1,6 +1,6 @@
 class VaccinationProgramsController < ApplicationController
   def index
-    @vaccination_programs = VaccinationProgram.all
+    @vaccination_programs = current_user.vaccination_programs
     if @vaccination_programs
       render json: { vaccinationPrograms: @vaccination_programs }
     else
@@ -10,7 +10,7 @@ class VaccinationProgramsController < ApplicationController
 
   def show
     @vaccination_program = VaccinationProgram.find(params[:id])
-    if @vaccination_program
+    if @vaccination_program && @vaccination_program.user_id == current_user.id
       render json: { vaccinationProgram: @vaccination_program }
     else
       render json: { status: 500, errors: ['program not found'] }
@@ -19,6 +19,7 @@ class VaccinationProgramsController < ApplicationController
 
   def create
     @vaccination_program = VaccinationProgram.new(vaccination_program_params)
+    @vaccination_program.user_id = current_user.id
     if @vaccination_program.save
       render json: { status: :created, vaccinationProgram: @vaccination_program }
     else
@@ -28,7 +29,7 @@ class VaccinationProgramsController < ApplicationController
 
   def update
     @vaccination_program = VaccinationProgram.find(params[:id])
-    if @vaccination_program.update(vaccination_program_params)
+    if @vaccination_program.user_id == current_user.id && @vaccination_program.update(vaccination_program_params)
       render json: { vaccinationProgram: @vaccination_program }
     else
       render json: { status: 500, errors: ['program not found'] }

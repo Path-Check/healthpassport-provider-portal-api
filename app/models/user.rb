@@ -3,4 +3,6 @@ class User < ApplicationRecord
   validates :email, presence: true
   validates :email, uniqueness: true
   validates :email, length: { minimum: 4 }
+
+  has_many :vaccination_programs
 end

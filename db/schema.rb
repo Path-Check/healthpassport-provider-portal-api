@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_183509) do
+ActiveRecord::Schema.define(version: 2020_11_21_015353) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
@@ -31,6 +31,9 @@ ActiveRecord::Schema.define(version: 2020_11_20_183509) do
     t.string "signature"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_vaccination_programs_on_user_id"
   end
 
+  add_foreign_key "vaccination_programs", "users"
 end

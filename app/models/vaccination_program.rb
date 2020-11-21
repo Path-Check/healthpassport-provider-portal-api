@@ -8,4 +8,5 @@ class VaccinationProgram < ApplicationRecord
   #t.string :signature
 
   #t.timestamps
+  belongs_to :user
 end
