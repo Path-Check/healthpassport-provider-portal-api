@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    if @user && user.id == current_user.id
+    if @user && @user.id == current_user.id
       render json: { user: @user }
     else
       render json: { status: 500, errors: ['user not found'] }
