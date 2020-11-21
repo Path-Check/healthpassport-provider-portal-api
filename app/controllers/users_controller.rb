@@ -2,7 +2,7 @@ require 'openssl'
 
 class UsersController < ApplicationController
   def index
-    @users = User.all
+    @users = User.find(current_user.id)
     if @users
       render json: { users: @users }
     else
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    if @user
+    if @user && user.id == current_user.id
       render json: { user: @user }
     else
       render json: { status: 500, errors: ['user not found'] }
