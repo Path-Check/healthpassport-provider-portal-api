@@ -27,12 +27,14 @@ The UI is [here](https://github.com/vitorpamplona/healthpassport-provider-portal
 - [x] Home Page
 - [x] New Vaccination Programs
 - [x] Listing Vaccination Programs on Home Page
+- [x] Generate and Sign Vaccination Program QR Code to Print
+- [x] Accept patient access to ask for their Name and sign the QR Code with Provider's Primary Key
+- [x] Generate and Download Patient's signed Certificate.
 - [ ] Health Provider's Password recovery (Forgot My Password logic)
 - [ ] Edit Vaccination Program
-- [ ] Generate and Sign Vaccination Program QR Code to Print
-- [ ] Accept patient access to ask for their Name and sign the QR Code with Provider's Primary Key
-- [ ] Generate and Download Patient's signed Certificate.
 - [ ] Rails error messages on the browser are exposing routes and potentially confidential information. Have to remove this somehow. 
+- [ ] Sign the Vaccination Program QR Code on the server
+- [ ] Sign the Certificate of Vaccination QR Code on the server
 
 ## Running
 
