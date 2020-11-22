@@ -1,0 +1,10 @@
+# Shouldn't require documentation... duh.. 
+Style/Documentation:
+  Enabled: false
+
+AllCops:
+  Excludes:
+    - db/schema.rb  
+    - bin/**/* 
+    - 'node_modules/**/*'
+    - 'vendor/**/*'

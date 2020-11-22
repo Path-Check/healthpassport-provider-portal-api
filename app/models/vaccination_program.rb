@@ -1,12 +1,13 @@
-class VaccinationProgram < ApplicationRecord
-  #t.string :vaccinator
-  #t.string :brand
-  #t.string :product
-  #t.string :lot
-  #t.string :dose
-  #t.string :route
-  #t.string :signature
+# frozen_string_literal: true
 
-  #t.timestamps
+class VaccinationProgram < ApplicationRecord
+  # t.string :vaccinator
+  # t.string :brand
+  # t.string :product
+  # t.string :lot
+  # t.string :dose
+  # t.string :route
+  # t.string :signature
+
   belongs_to :user
 end

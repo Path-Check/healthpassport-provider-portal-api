@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUserToVaccinationPrograms < ActiveRecord::Migration[6.0]
   def change
     add_reference :vaccination_programs, :user

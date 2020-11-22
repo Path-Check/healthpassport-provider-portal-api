@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VaccinationProgramsController < ApplicationController
   def index
     @vaccination_programs = current_user.vaccination_programs

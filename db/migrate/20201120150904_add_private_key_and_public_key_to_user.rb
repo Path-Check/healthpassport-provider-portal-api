@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'openssl'
 
 class AddPrivateKeyAndPublicKeyToUser < ActiveRecord::Migration[6.0]
@@ -12,7 +14,6 @@ class AddPrivateKeyAndPublicKeyToUser < ActiveRecord::Migration[6.0]
 
       user.save
     end
-
   end
 
   def self.down
