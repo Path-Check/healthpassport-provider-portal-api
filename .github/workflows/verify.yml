@@ -44,13 +44,13 @@ jobs:
       - name: Run linters
         run: |
           bin/rubocop --parallel
-          bin/stylelint
-          bin/prettier
-          bin/eslint
-      - name: Run security checks
-        run: |
-          bin/bundler-audit --update
-          bin/brakeman -q -w2
+#          bin/stylelint
+#          bin/prettier
+#          bin/eslint
+#      - name: Run security checks
+#        run: |
+#          bin/bundler-audit --update
+#          bin/brakeman -q -w2
 
   tests:
     name: Tests
@@ -106,7 +106,7 @@ jobs:
           PGHOST: localhost
           PGUSER: myapp
         run: |
-          bin/rails db:setup
+          rails db:setup
 
       - name: Run tests
-        run: bin/rspec
+        run: rspec
