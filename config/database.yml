@@ -21,5 +21,10 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  host: localhost 
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: healthpassport-provider-portal-api _production
+  username: healthpassport-provider-portal-api 
+  password: 12345
