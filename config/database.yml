@@ -27,4 +27,4 @@ production:
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database: healthpassport-provider-portal-api _production
   username: healthpassport-provider-portal-api 
-  password: 12345
+  password: <%= ENV.fetch("HEALTHPASSPORT-PROVIDER-PORTAL-API_DATABASE_PASSWORD") { 5 } %>
