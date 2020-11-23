@@ -42,9 +42,9 @@ class VaccinationProgramsController < ApplicationController
 
   def verify
     # can be run logged off.
-    verified = verify_public_url_for_today(params[:id], params[:signature])
+    @vaccination_program = VaccinationProgram.find(params[:id])
+    verified = verify_public_url_for_today(params[:id], params[:signature], @vaccination_program.user)
     if verified
-      @vaccination_program = VaccinationProgram.find(params[:id])
       render json: { verified: verified, vaccinationProgram: @vaccination_program }
     else
       render json: { verified: verified }
@@ -53,11 +53,11 @@ class VaccinationProgramsController < ApplicationController
 
   def certify
     # can be run logged off.
-    verified = verify_public_url_for_today(params[:id], CGI::unescape(params[:certificate][:program_signature]))
+    @vaccination_program = VaccinationProgram.find(params[:id])
+    verified = verify_public_url_for_today(params[:id], CGI::unescape(params[:certificate][:program_signature]), @vaccination_program.user)
     if verified
-      @vaccination_program = VaccinationProgram.find(params[:id])
-      certificate = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee])
-      render json: { verified: verified, certificate: certificate }
+      cert = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee], @vaccination_program.user)
+      render json: { verified: verified, certificate: cert }
     else
       render json: { status: 500, verified: verified, errors: ['cannot certify this record']}
     end
@@ -77,9 +77,9 @@ class VaccinationProgramsController < ApplicationController
       "&vaccinee=#{CGI::escape(vaccinee || '')}"
   end
 
-  def signed_public_certificate(vac_prog, vaccinee)
+  def signed_public_certificate(vac_prog, vaccinee, user)
     message = certificate_url(vac_prog, vaccinee)
-    private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
+    private_key = OpenSSL::PKey::RSA.new(user.private_key)
     signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
     base64_escaped_signature = CGI::escape(Base64.encode64(signature))
     "#{message}&signature=#{base64_escaped_signature}"
@@ -98,9 +98,9 @@ class VaccinationProgramsController < ApplicationController
     "#{message}&signature=#{base64_escaped_signature}"
   end
 
-  def verify_public_url_for_today(id, signature)
+  def verify_public_url_for_today(id, signature, user)
     message = generate_certificate_url(id)
-    public_key = OpenSSL::PKey::RSA.new(current_user.public_key)
+    public_key = OpenSSL::PKey::RSA.new(user.public_key)
     public_key.verify(OpenSSL::Digest.new('SHA256'), Base64.decode64(signature), message)
   end
 
