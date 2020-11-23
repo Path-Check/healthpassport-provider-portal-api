@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resources :vaccination_programs do
     member do
-      get 'verify'
+      match 'verify', 'certify', via: %i[get post]
     end
   end
 

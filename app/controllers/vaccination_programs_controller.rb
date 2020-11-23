@@ -51,7 +51,39 @@ class VaccinationProgramsController < ApplicationController
     end
   end
 
+  def certify
+    # can be run logged off.
+    verified = verify_public_url_for_today(params[:id], CGI::unescape(params[:certificate][:program_signature]))
+    if verified
+      @vaccination_program = VaccinationProgram.find(params[:id])
+      certificate = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee])
+      render json: { verified: verified, certificate: certificate }
+    else
+      render json: { status: 500, verified: verified, errors: ['cannot certify this record']}
+    end
+  end
+
   private
+
+  def certificate_url(vac_prog, vaccinee)
+    'healthpass:vaccine' \
+      "?name=#{CGI::escape(vac_prog.product || '')}" \
+      "&vaccinator=#{CGI::escape(vac_prog.vaccinator || '')}" \
+      "&date=#{Time.now.strftime('%Y-%m-%d')}" \
+      "&manuf=#{CGI::escape(vac_prog.brand || '')}" \
+      "&route=#{CGI::escape(vac_prog.route || '')}" \
+      "&lot=#{CGI::escape(vac_prog&.lot || '')}" \
+      "&dose=#{CGI::escape(vac_prog.dose || '')}" \
+      "&vaccinee=#{CGI::escape(vaccinee || '')}"
+  end
+
+  def signed_public_certificate(vac_prog, vaccinee)
+    message = certificate_url(vac_prog, vaccinee)
+    private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
+    signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
+    base64_escaped_signature = CGI::escape(Base64.encode64(signature))
+    "#{message}&signature=#{base64_escaped_signature}"
+  end
 
   def generate_certificate_url(id)
     ui_url = Rails.env.production? ? 'http://healthpassport.vitorpamplona.com' : 'http://localhost:3001'
