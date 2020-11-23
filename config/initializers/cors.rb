@@ -2,7 +2,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'vitorpamplona.com', 'localhost:3001'
+    origins 'healthpassportprovider.herokuapp.com', 'localhost:3001'
 
     resource '*',
              headers: :any,
