@@ -11,7 +11,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 
   allow do
-    origins 'https://vitorpamplona.com/'
+    origins 'https://vitorpamplona.com/healthpassport-provider-portal-ui/'
 
     resource '*',
              headers: :any,
