@@ -69,6 +69,7 @@ class VaccinationProgramsController < ApplicationController
     'healthpass:vaccine' \
       "?name=#{CGI::escape(vac_prog.product || '')}" \
       "&vaccinator=#{CGI::escape(vac_prog.vaccinator || '')}" \
+      "&vaccinator_pub_key=healthpassport.vitorpamplona.com/u/1/pub" \
       "&date=#{Time.now.strftime('%Y-%m-%d')}" \
       "&manuf=#{CGI::escape(vac_prog.brand || '')}" \
       "&route=#{CGI::escape(vac_prog.route || '')}" \
@@ -86,7 +87,7 @@ class VaccinationProgramsController < ApplicationController
   end
 
   def generate_certificate_url(id)
-    ui_url = Rails.env.production? ? 'http://healthpassport.vitorpamplona.com' : 'http://localhost:3001'
+    ui_url = Rails.env.production? ? 'https://healthpassport.vitorpamplona.com' : 'http://localhost:3001'
     "#{ui_url}/generateCertificate/#{id}?date=#{Time.now.strftime('%Y-%m-%d')}"
   end
 
