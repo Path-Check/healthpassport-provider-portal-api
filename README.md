@@ -2,7 +2,8 @@
 
 This is a Rails-based backend for a Health Provider portal to manage and sign Vaccination Certificates. 
 
-The UI is [here](https://github.com/vitorpamplona/healthpassport-provider-portal-ui). 
+The UI part is [here](https://github.com/vitorpamplona/healthpassport-provider-portal-ui). 
+A Demo hot deployed from staging is [here](https://healthpassport.vitorpamplona.com/). 
 
 <img src="./docs/ProviderPortalPreview.png" data-canonical-src="./docs/ProviderPortalPreview.png"/>
 
@@ -32,10 +33,14 @@ The UI is [here](https://github.com/vitorpamplona/healthpassport-provider-portal
 - [x] Generate and Download Patient's signed Certificate.
 - [x] Sign the Vaccination Program QR Code on the server
 - [x] Sign the Certificate of Vaccination QR Code on the server
+- [x] User's public key download
+- [x] Percent-encoding and Base64 for signatures
+- [x] Staging deployed [here](https://healthpassport.vitorpamplona.com/)
 - [ ] Health Provider's Password recovery (Forgot My Password logic)
 - [ ] Edit Vaccination Program
 - [ ] Rails error messages on the browser are exposing routes and potentially confidential information. Have to remove this somehow. 
-
+- [ ] Dockerize it
+- [ ] Reduce amount of data on QRCodes
 
 ## Running
 
