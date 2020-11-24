@@ -32,6 +32,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def pub_key
+    @user = User.find(params[:id])
+    if @user
+      render plain: @user.public_key
+    else
+      render json: { status: 500, errors: ['user not found'] }
+    end
+  end
+
   private
 
   def create_new_keys(user)

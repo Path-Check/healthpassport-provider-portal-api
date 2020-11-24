@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/login',    to: 'sessions#create'
   post '/logout',   to: 'sessions#destroy'
   get '/logged_in', to: 'sessions#check_logged_in?'
+  get '/u/:id/pub_key', to: 'users#pub_key'
 
   resources :vaccination_programs do
     member do
@@ -14,5 +15,8 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[create show index] do
     resources :items, only: %i[create show index destroy]
+    member do
+      match 'pub_key', via: %i[get post]
+    end
   end
 end

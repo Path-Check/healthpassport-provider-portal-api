@@ -77,7 +77,7 @@ class VaccinationProgramsController < ApplicationController
   def certificate_url(vac_prog, vaccinee)
     api_url = Rails.env.production? ? 'https://healthpassport-api.vitorpamplona.com' : 'http://localhost:3001'
     'healthpass:vaccine' \
-      "?vaccinator_pub_key=#{api_url}/u/#{vac_prog.user.id}/pub" \
+      "?vaccinator_pub_key=#{api_url}/u/#{vac_prog.user.id}/pub_key" \
       "&date=#{Time.now.strftime('%Y-%m-%d')}" \
       "&vaccinee=#{CGI.escape(vaccinee || '')}" +
       vaccine_program_details_to_certificate_url(vac_prog)
