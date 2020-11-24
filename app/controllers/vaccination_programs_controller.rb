@@ -65,24 +65,29 @@ class VaccinationProgramsController < ApplicationController
 
   private
 
+  def vaccine_program_details_to_certificate_url(vac_prog)
+    "&vaccinator=#{CGI.escape(vac_prog.vaccinator || '')}" \
+    "&manuf=#{CGI.escape(vac_prog.brand || '')}" \
+    "&name=#{CGI.escape(vac_prog.product || '')}" \
+    "&route=#{CGI.escape(vac_prog.route || '')}" \
+    "&lot=#{CGI.escape(vac_prog.lot || '')}" \
+    "&dose=#{CGI.escape(vac_prog.dose || '')}"
+  end
+
   def certificate_url(vac_prog, vaccinee)
+    api_url = Rails.env.production? ? 'https://healthpassport-api.vitorpamplona.com' : 'http://localhost:3001'
     'healthpass:vaccine' \
-      "?name=#{CGI::escape(vac_prog.product || '')}" \
-      "&vaccinator=#{CGI::escape(vac_prog.vaccinator || '')}" \
-      "&vaccinator_pub_key=healthpassport.vitorpamplona.com/u/1/pub" \
+      "?vaccinator_pub_key=#{api_url}/u/#{vac_prog.user.id}/pub" \
       "&date=#{Time.now.strftime('%Y-%m-%d')}" \
-      "&manuf=#{CGI::escape(vac_prog.brand || '')}" \
-      "&route=#{CGI::escape(vac_prog.route || '')}" \
-      "&lot=#{CGI::escape(vac_prog&.lot || '')}" \
-      "&dose=#{CGI::escape(vac_prog.dose || '')}" \
-      "&vaccinee=#{CGI::escape(vaccinee || '')}"
+      "&vaccinee=#{CGI.escape(vaccinee || '')}" +
+      vaccine_program_details_to_certificate_url(vac_prog)
   end
 
   def signed_public_certificate(vac_prog, vaccinee, user)
     message = certificate_url(vac_prog, vaccinee)
     private_key = OpenSSL::PKey::RSA.new(user.private_key)
     signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
-    base64_escaped_signature = CGI::escape(Base64.encode64(signature))
+    base64_escaped_signature = CGI.escape(Base64.encode64(signature))
     "#{message}&signature=#{base64_escaped_signature}"
   end
 
@@ -95,7 +100,7 @@ class VaccinationProgramsController < ApplicationController
     message = generate_certificate_url(id)
     private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
     signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
-    base64_escaped_signature = CGI::escape(Base64.encode64(signature))
+    base64_escaped_signature = CGI.escape(Base64.encode64(signature))
     "#{message}&signature=#{base64_escaped_signature}"
   end
 
