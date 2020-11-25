@@ -51,3 +51,11 @@ Install modules:
 
 Start the API server
 `rails server `
+
+## Staging Server
+
+This project is deployed to [https://healthpassport.vitorpamplona.com](https://healthpassport.vitorpamplona.com) at every commit. 
+
+## Contributing
+
+[Issues](https://github.com/Path-Check/healthpassport-provider-portal-api/issues) and [pull requests](https://github.com/Path-Check/healthpassport-provider-portal-api/pulls) are very welcome! :)
