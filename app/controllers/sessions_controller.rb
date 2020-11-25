@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
     if @user&.authenticate(session_params[:password])
       login!
-      render json: { logged_in: true, user: @user }
+      render json: { logged_in: true, user: @user.to_json(only: %i[id email]) }
     else
       render json: { status: 401, errors: ['no such user, please try again'] }
     end
@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
 
   def check_logged_in?
     if logged_in? && current_user
-      render json: { logged_in: true, user: current_user }
+      render json: { logged_in: true, user: current_user.to_json(only: %i[id email]) }
     else
       render json: { logged_in: false, message: 'no such user' }
     end

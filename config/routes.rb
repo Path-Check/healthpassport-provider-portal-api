@@ -13,8 +13,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: %i[create show index] do
-    resources :items, only: %i[create show index destroy]
+  resources :users, only: %i[create show] do
+    resources :items, only: %i[create show destroy]
     member do
       match 'pub_key', via: %i[get post]
     end
