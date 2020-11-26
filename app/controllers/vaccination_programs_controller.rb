@@ -13,7 +13,7 @@ class VaccinationProgramsController < ApplicationController
   def show
     @vaccination_program = VaccinationProgram.find(params[:id])
     if @vaccination_program && @vaccination_program.user_id == current_user.id
-      signed_public_url = signed_public_url_for_today(params[:id])
+      signed_public_url = sign_public_url_for_today(params[:id])
       render json: { vaccinationProgram: @vaccination_program, signedPublicURL: signed_public_url }
     else
       render status: 500, json: { errors: ['Vaccination Program not found'] }
@@ -101,7 +101,7 @@ class VaccinationProgramsController < ApplicationController
     "#{ui_url}/generateCertificate/#{id}?date=#{Time.now.strftime('%Y-%m-%d')}"
   end
 
-  def signed_public_url_for_today(id)
+  def sign_public_url_for_today(id)
     message = generate_certificate_url(id)
     private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
     signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
