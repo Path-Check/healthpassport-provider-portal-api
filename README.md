@@ -54,7 +54,7 @@ Start the API server
 
 ## Staging Server
 
-This project is deployed to [https://healthpassport.vitorpamplona.com](https://healthpassport.vitorpamplona.com) at every commit. 
+This project is deployed to [https://healthpassport-api.vitorpamplona.com](https://healthpassport-api.vitorpamplona.com) at every commit. 
 
 ## Contributing
 
