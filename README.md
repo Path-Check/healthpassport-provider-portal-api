@@ -21,6 +21,36 @@ A Demo hot deployed from staging is [here](https://healthpassport.vitorpamplona.
 
 6. Users load on their signed certificate to the [Health Passport Reader app](https://github.com/vitorpamplona/healthpassport-reader-app). 
 
+## QR Code formats used: 
+
+There are two main QR formats we use: (i) a signed public URL that is used to generate an imunization certificate and (ii) the signed immunization certificate itself. It follows the format. 
+
+### A Signed Public URL
+
+The Signed Public URL is generated for a Vaccination Proram to be placed publically in the Vaccination site. 
+It allows patients to scan the information of the vaccine, insert their names and generate a signed certificate from the 
+Vaccinator's private key. 
+
+```{UI_API}/generateCertificate/{id_program}?date=YYYY-MM-DD&signature={RSA_SHA256}```
+
+Example:
+
+```
+https://healthpassport.vitorpamplona.com/generateCertificate/9?date=2020-11-26&signature=x9iSOLHgdlP5DUN4Aj2cbAqF1mDmkYcwB%2Bt327U6izI84QJXVDzN1ETfFfU8%0ADFfvuAnnwysM0NnycHjqMJMvlscDNeqqLcSzCoswMAfN6pSAboqdXArpP0gj%0AzUNP82cLI3OesK2TFNnwRiGkaakxGsEhaVX0x%2BriCr3Qk%2B5Py4c%3D%0A
+```
+
+### Immunization Certificate
+
+The certificate is the official document that prove a patient name has taken a vaccine. It follows the format: 
+
+```healthpass:vaccine?vaccinator_pub_key={API/u/{user_id}/pub_key}?date=YYYY-MM-DD&vaccinee={patient_name}&vaccinator={place}&manuf={vaccine brand}&name={vaccine name}&route={Intramuscular, Subcutaneous, etc}&lot={lot number}&dose={applied dose}&signature={RSA_SHA256}```
+
+Example:
+
+```
+healthpass:vaccine?vaccinator_pub_key=healthpassport-api.vitorpamplona.com/u/6/pub_key&date=2020-11-26&vaccinee=Vitor+Fernando+pamplona+dos+santos&vaccinator=CVS+Minute+Clinics&manuf=Moderna+Vaccine&name=COVID19&route=Intramuscular&lot=&dose=1&signature=RVQ9h0s1rW%2BJ8Smy6%2Fg695oTclJ%2B%2FawR0m%2FVQRhyNZ6gyGVxajQMtRHPtE6z%0APdi29Fk7Nf0oIVebaLzgBvIzhnO6F7STZIN0KNN1ItxGsbcMxawN4jTF9rtr%0A980f4o1oj21nJZ5n8CeXapQQdLLZQyTTW0eBWGeQ8aMmNNh3lAS2RwcCNsRm%0A3GObdJMpgeSNm9Gh7KXbqSGL0bCPFA%2FTySU4lycAGJVAQH5VdjzC1OoeFYKa%0Ay7U%2FFLlIr4twkq0GMP48WYPIaBUDs6HSicDezqOHQn8c8sPMZ%2FXShwHpWpMH%0AyNKAGr8itGa4vmhnlyW8penV%2BjIjNVHDm%2B%2B7ZW3BbOQm9BwmtNwuczsmvcFb%0AiOpUdDhXTgHt0K%2FN%2BLzmQMP%2FmWahLTcTNtJOBd74GyRZXHkGxZ%2B%2BxOaqY%2FnY%0AcSeK693Ol%2ByJeg6NAXakez%2F1Kpu441sD7aImqy0hMd28BDfjPRS7Cb9v%2Fe16%0ALxYxIjai8B%2F8rR%2FE690mUMLX%2BAjd8fKQmm9rMNC2ANj12g13zV%2B8yLYcwTBA%0AyH9L3vVvTQhKCAHA6mOy86fs9N7KPv9FeKRIneQiElzFfh%2BsLE9fLigiZ%2Ffm%0AuPk9qSQZDMg1TTSMZDP1Hx4Nem%2Fz1D%2FJV1zxnoOSTh%2FBGZonOF5YgB967%2Fox%0Asev09MdoBmUNxIyZHnxDw%2BM%3D%0A
+```
+
 ## Features / TO-DO List
 
 - [x] Health Provider Sign Up
