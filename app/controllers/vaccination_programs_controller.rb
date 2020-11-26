@@ -64,6 +64,8 @@ class VaccinationProgramsController < ApplicationController
     else
       render status: 500, json: { verified: verified, errors: ['Cannot certify this record'] }
     end
+  rescue ActiveRecord::RecordNotFound
+    render status: 500, json: { errors: ['Invalid Sinature', 'QR code might be expired', 'Try scanning your code again'] }
   end
 
   private
