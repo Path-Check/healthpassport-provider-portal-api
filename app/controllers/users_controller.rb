@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     if @user && @user.id == current_user.id
       render json: { user: @user.to_json(only: %i[id email]) }
     else
-      render json: { status: 500, errors: ['user not found'] }
+      render status: 500, json: { errors: ['User not found'] }
     end
   end
 
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
       login!
       render json: { status: :created, user: @user.to_json(only: %i[id email]) }
     else
-      render json: { status: 500, errors: @user.errors.full_messages }
+      render status: 500, json: { errors: @user.errors.full_messages }
     end
   end
 
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     if @user
       render plain: @user.public_key
     else
-      render json: { status: 500, errors: ['user not found'] }
+      render status: 500, json: { errors: ['User not found'] }
     end
   end
 

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       login!
       render json: { logged_in: true, user: @user.to_json(only: %i[id email]) }
     else
-      render json: { status: 401, errors: ['no such user, please try again'] }
+      render status: 401, json: { errors: ['Invalid credentials', 'Please try again'] }
     end
   end
 
@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
     if logged_in? && current_user
       render json: { logged_in: true, user: current_user.to_json(only: %i[id email]) }
     else
-      render json: { logged_in: false, message: 'no such user' }
+      render json: { logged_in: false, message: 'Not logged in' }
     end
   end
 

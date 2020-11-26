@@ -6,19 +6,20 @@ class VaccinationProgramsController < ApplicationController
     if @vaccination_programs
       render json: { vaccinationPrograms: @vaccination_programs }
     else
-      render json: { status: 500, errors: ['no programs found'] }
+      render status: 500, json: { errors: ['No Vaccination programs found'] }
     end
   end
 
   def show
     @vaccination_program = VaccinationProgram.find(params[:id])
-    signed_public_url = signed_public_url_for_today(params[:id])
-    puts signed_public_url
     if @vaccination_program && @vaccination_program.user_id == current_user.id
+      signed_public_url = signed_public_url_for_today(params[:id])
       render json: { vaccinationProgram: @vaccination_program, signedPublicURL: signed_public_url }
     else
-      render json: { status: 500, errors: ['program not found'] }
+      render status: 500, json: { errors: ['Vaccination Program not found'] }
     end
+  rescue ActiveRecord::RecordNotFound
+    render status: 500, json: { errors: ['Vaccination Program not found'] }
   end
 
   def create
@@ -27,7 +28,7 @@ class VaccinationProgramsController < ApplicationController
     if @vaccination_program.save
       render json: { status: :created, vaccinationProgram: @vaccination_program }
     else
-      render json: { status: 500, errors: @vaccination_program.errors.full_messages }
+      render status: 500, json: { errors: @vaccination_program.errors.full_messages }
     end
   end
 
@@ -36,7 +37,7 @@ class VaccinationProgramsController < ApplicationController
     if @vaccination_program.user_id == current_user.id && @vaccination_program.update(vaccination_program_params)
       render json: { vaccinationProgram: @vaccination_program }
     else
-      render json: { status: 500, errors: ['program not found'] }
+      render status: 500, json: { errors: ['Vaccination Program not found'] }
     end
   end
 
@@ -47,8 +48,10 @@ class VaccinationProgramsController < ApplicationController
     if verified
       render json: { verified: verified, vaccinationProgram: @vaccination_program }
     else
-      render json: { verified: verified }
+      render status: 500, json: { verified: verified, errors: ['Invalid Sinature', 'QR code might be expired', 'Try scanning your code again'] }
     end
+  rescue ActiveRecord::RecordNotFound
+    render status: 500, json: { errors: ['Invalid Sinature', 'QR code might be expired', 'Try scanning your code again'] }
   end
 
   def certify
@@ -59,7 +62,7 @@ class VaccinationProgramsController < ApplicationController
       cert = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee], @vaccination_program.user)
       render json: { verified: verified, certificate: cert }
     else
-      render json: { status: 500, verified: verified, errors: ['cannot certify this record']}
+      render status: 500, json: { verified: verified, errors: ['Cannot certify this record'] }
     end
   end
 
