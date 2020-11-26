@@ -35,7 +35,7 @@ class UsersController < ApplicationController
   private
 
   def create_new_keys(user)
-    rsa_key = OpenSSL::PKey::RSA.new(1024)
+    rsa_key = OpenSSL::PKey::RSA.new(2048)
     user.private_key = rsa_key.to_pem
     user.public_key = rsa_key.public_key.to_pem
   end
