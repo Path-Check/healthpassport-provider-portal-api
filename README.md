@@ -31,7 +31,7 @@ The Signed Public URL is generated for a Vaccination Proram to be placed publica
 It allows patients to scan the information of the vaccine, insert their names and generate a signed certificate from the 
 Vaccinator's private key. 
 
-```{UI_API}/generateCertificate/{id_program}?date=YYYY-MM-DD&signature={RSA_SHA256}```
+```http://{UI_URL}/generateCertificate/{id_program}?date=YYYY-MM-DD&signature={RSA_SHA256}```
 
 Example:
 
