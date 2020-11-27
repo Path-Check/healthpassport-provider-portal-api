@@ -59,7 +59,7 @@ class VaccinationProgramsController < ApplicationController
     @vaccination_program = VaccinationProgram.find(params[:id])
     verified = verify_public_url_for_today(params[:id], CGI::unescape(params[:certificate][:program_signature]), @vaccination_program.user)
     if verified
-      cert = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee], @vaccination_program.user)
+      cert = signed_public_certificate(@vaccination_program, params[:certificate][:vaccinee])
       render json: { verified: verified, certificate: cert }
     else
       render status: 500, json: { verified: verified, errors: ['Cannot certify this record'] }
@@ -70,30 +70,27 @@ class VaccinationProgramsController < ApplicationController
 
   private
 
-  def vaccine_program_details_to_certificate_url(vac_prog)
-    "&vaccinator=#{CGI.escape(vac_prog.vaccinator || '')}" \
-    "&manuf=#{CGI.escape(vac_prog.brand || '')}" \
-    "&name=#{CGI.escape(vac_prog.product || '')}" \
-    "&route=#{CGI.escape(vac_prog.route || '')}" \
-    "&lot=#{CGI.escape(vac_prog.lot || '')}" \
-    "&dose=#{CGI.escape(vac_prog.dose || '')}"
+  def certificate_message(vac_prog, vaccinee)
+    "date=#{Time.now.strftime('%Y-%m-%d')}" \
+      "&vaccinee=#{CGI.escape(vaccinee || '')}" \
+      "&vaccinator=#{CGI.escape(vac_prog.vaccinator || '')}" \
+      "&manuf=#{CGI.escape(vac_prog.brand || '')}" \
+      "&name=#{CGI.escape(vac_prog.product || '')}" \
+      "&route=#{CGI.escape(vac_prog.route || '')}" \
+      "&lot=#{CGI.escape(vac_prog.lot || '')}" \
+      "&dose=#{CGI.escape(vac_prog.dose || '')}"
   end
 
-  def certificate_url(vac_prog, vaccinee)
-    api_url = Rails.env.production? ? 'https://healthpassport-api.vitorpamplona.com' : 'http://localhost:3001'
-    'healthpass:vaccine' \
-      "?vaccinator_pub_key=#{api_url}/u/#{vac_prog.user.id}/pub_key" \
-      "&date=#{Time.now.strftime('%Y-%m-%d')}" \
-      "&vaccinee=#{CGI.escape(vaccinee || '')}" +
-      vaccine_program_details_to_certificate_url(vac_prog)
-  end
-
-  def signed_public_certificate(vac_prog, vaccinee, user)
-    message = certificate_url(vac_prog, vaccinee)
-    private_key = OpenSSL::PKey::RSA.new(user.private_key)
+  def signed_public_certificate(vac_prog, vaccinee)
+    message = certificate_message(vac_prog, vaccinee)
+    private_key = OpenSSL::PKey::RSA.new(vac_prog.user.private_key)
     signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
     base64_escaped_signature = CGI.escape(Base64.encode64(signature))
-    "#{message}&signature=#{base64_escaped_signature}"
+
+    api_url = Rails.env.production? ? 'healthpassport-api.vitorpamplona.com' : 'localhost:3000'
+    pub_key_url = "#{api_url}/u/#{vac_prog.user.id}/pub_key"
+
+    "healthpass:SHA256\\#{base64_escaped_signature}@#{pub_key_url}?#{message}"
   end
 
   def generate_certificate_url(id)
