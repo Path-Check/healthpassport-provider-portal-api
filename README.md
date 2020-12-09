@@ -25,7 +25,7 @@ A Demo hot deployed from staging is [here](https://healthpassport.vitorpamplona.
 
 There are two main QR formats we use: (i) a signed public URL that is used to generate an imunization certificate and (ii) the signed immunization certificate itself. It follows the format. 
 
-### A Signed Public URL
+### A Signed Vaccine Program Public URL for Users to Generate Certificates
 
 The Signed Public URL is generated for a Vaccination Proram to be placed publically in the Vaccination site. 
 It allows patients to scan the information of the vaccine, insert their names and generate a signed certificate from the 
