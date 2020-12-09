@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,29 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_21_015353) do
-  create_table 'users', force: :cascade do |t|
-    t.string 'email'
-    t.string 'password_digest'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.string 'private_key'
-    t.string 'public_key'
+ActiveRecord::Schema.define(version: 2020_12_09_174537) do
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "private_key"
+    t.string "public_key"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  create_table 'vaccination_programs', force: :cascade do |t|
-    t.string 'vaccinator'
-    t.string 'brand'
-    t.string 'product'
-    t.string 'lot'
-    t.string 'dose'
-    t.string 'route'
-    t.string 'signature'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.integer 'user_id'
-    t.index ['user_id'], name: 'index_vaccination_programs_on_user_id'
+  create_table "vaccination_programs", force: :cascade do |t|
+    t.string "vaccinator"
+    t.string "brand"
+    t.string "product"
+    t.string "lot"
+    t.string "dose"
+    t.string "route"
+    t.string "signature"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_vaccination_programs_on_user_id"
   end
 
-  add_foreign_key 'vaccination_programs', 'users'
+  add_foreign_key "vaccination_programs", "users"
 end
