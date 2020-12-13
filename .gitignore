@@ -42,3 +42,5 @@ yarn-debug.log*
 
 # Ignore file allowing spec re-runs
 /spec/examples.txt
+
+/vendor/*
