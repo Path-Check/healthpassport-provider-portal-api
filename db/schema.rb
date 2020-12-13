@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_09_174537) do
+ActiveRecord::Schema.define(version: 2020_12_13_020834) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 2020_12_09_174537) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+    t.integer "next_dose_in_days"
+    t.integer "required_doses"
     t.index ["user_id"], name: "index_vaccination_programs_on_user_id"
   end
 

@@ -78,7 +78,9 @@ class VaccinationProgramsController < ApplicationController
       "&name=#{CGI.escape(vac_prog.product || '')}" \
       "&route=#{CGI.escape(vac_prog.route || '')}" \
       "&lot=#{CGI.escape(vac_prog.lot || '')}" \
-      "&dose=#{CGI.escape(vac_prog.dose || '')}"
+      "&dose=#{CGI.escape(vac_prog.dose || '')}"\
+      "&required_doses=#{vac_prog.required_doses}"\
+      "&next_dose_in_days=#{vac_prog.next_dose_in_days}"
   end
 
   def signed_public_certificate(vac_prog, vaccinee)
@@ -113,6 +115,6 @@ class VaccinationProgramsController < ApplicationController
   end
 
   def vaccination_program_params
-    params.require(:vaccinationProgram).permit(:vaccinator, :brand, :product, :lot, :dose, :route, :signature)
+    params.require(:vaccinationProgram).permit(:vaccinator, :brand, :product, :lot, :dose, :route, :required_doses, :next_dose_in_days)
   end
 end
