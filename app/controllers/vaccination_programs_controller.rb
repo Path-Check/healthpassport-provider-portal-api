@@ -108,7 +108,7 @@ class VaccinationProgramsController < ApplicationController
       signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
     else
       sk = OpenSSL::PKey::EC.new(vac_prog.user.private_key)
-      signature = sk.dsa_sign_asn1(message)
+      signature = sk.dsa_sign_asn1(Digest::SHA256.digest(message))
     end
 
     signatureBase32 = rm_pad(Base32.encode(signature))
