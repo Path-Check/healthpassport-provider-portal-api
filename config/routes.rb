@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post '/logout',   to: 'sessions#destroy'
   get '/logged_in', to: 'sessions#check_logged_in?'
   get '/u/:id/pub_key', to: 'users#pub_key'
+  get '/U/:id/KEY', to: 'users#pub_key'
 
   resources :vaccination_programs do
     member do

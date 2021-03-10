@@ -71,28 +71,49 @@ class VaccinationProgramsController < ApplicationController
   private
 
   def certificate_message(vac_prog, vaccinee)
-    "date=#{Time.now.strftime('%Y-%m-%d')}" \
-      "&vaccinee=#{CGI.escape(vaccinee || '')}" \
-      "&vaccinator=#{CGI.escape(vac_prog.vaccinator || '')}" \
-      "&manuf=#{CGI.escape(vac_prog.brand || '')}" \
-      "&name=#{CGI.escape(vac_prog.product || '')}" \
-      "&route=#{CGI.escape(vac_prog.route || '')}" \
-      "&lot=#{CGI.escape(vac_prog.lot || '')}" \
-      "&dose=#{CGI.escape(vac_prog.dose || '')}"\
-      "&required_doses=#{vac_prog.required_doses}"\
-      "&next_dose_in_days=#{vac_prog.next_dose_in_days}"
+    "#{Time.now.strftime('%Y%m%d')}" \
+      "/#{CGI.escape(vac_prog.brand&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.product&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.lot&.upcase || '')}" \
+      "/#{vac_prog.required_doses}"\
+      "/#{CGI.escape(vaccinee&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.route&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.dose&.upcase || '')}"
+  end
+
+  def rm_pad(base32text)
+    base32text.gsub '=', ''
+  end
+
+  def pad(base32str)
+    base32str +
+      case base32str.length % 8
+      when 2 then '======'
+      when 4 then '===='
+      when 5 then '==='
+      when 7 then '='
+      else ''
+      end
   end
 
   def signed_public_certificate(vac_prog, vaccinee)
     message = certificate_message(vac_prog, vaccinee)
-    private_key = OpenSSL::PKey::RSA.new(vac_prog.user.private_key)
-    signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
-    base64_escaped_signature = CGI.escape(Base64.encode64(signature))
+    signature = ''
 
     api_url = Rails.env.production? ? 'healthpassport-api.vitorpamplona.com' : 'localhost:3000'
-    pub_key_url = "#{api_url}/u/#{vac_prog.user.id}/pub_key"
+    pub_key_url = "#{api_url}/U/#{vac_prog.user.id}/KEY".upcase
 
-    "healthpass:SHA256\\#{base64_escaped_signature}@#{pub_key_url}?#{message}"
+    if vac_prog.user.private_key.include? 'RSA'
+      private_key = OpenSSL::PKey::RSA.new(vac_prog.user.private_key)
+      signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
+    else
+      sk = OpenSSL::PKey::EC.new(vac_prog.user.private_key)
+      signature = sk.dsa_sign_asn1(message)
+    end
+
+    signatureBase32 = rm_pad(Base32.encode(signature))
+
+    "CRED:BADGE:2:#{signatureBase32}:#{pub_key_url}:#{message}"
   end
 
   def generate_certificate_url(id)
@@ -102,16 +123,30 @@ class VaccinationProgramsController < ApplicationController
 
   def sign_public_url_for_today(id)
     message = generate_certificate_url(id)
-    private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
-    signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
+
+    if current_user.private_key.include? 'RSA'
+      private_key = OpenSSL::PKey::RSA.new(current_user.private_key)
+      signature = private_key.sign(OpenSSL::Digest.new('SHA256'), message)
+    else
+      sk = OpenSSL::PKey::EC.new(current_user.private_key)
+      signature = sk.dsa_sign_asn1(message)
+    end
+
     base64_escaped_signature = CGI.escape(Base64.encode64(signature))
     "#{message}&signature=#{base64_escaped_signature}"
   end
 
   def verify_public_url_for_today(id, signature, user)
     message = generate_certificate_url(id)
-    public_key = OpenSSL::PKey::RSA.new(user.public_key)
-    public_key.verify(OpenSSL::Digest.new('SHA256'), Base64.decode64(signature), message)
+    verified = false
+    if user.private_key.include? 'RSA'
+      public_key = OpenSSL::PKey::RSA.new(user.public_key)
+      verified = public_key.verify(OpenSSL::Digest.new('SHA256'), Base64.decode64(signature), message)
+    else
+      vk = OpenSSL::PKey::EC.new(user.public_key)
+      verified = vk.dsa_verify_asn1(message, Base64.decode64(signature))
+    end
+    verified
   end
 
   def vaccination_program_params

@@ -35,9 +35,15 @@ class UsersController < ApplicationController
   private
 
   def create_new_keys(user)
-    rsa_key = OpenSSL::PKey::RSA.new(1024)
-    user.private_key = rsa_key.to_pem
-    user.public_key = rsa_key.public_key.to_pem
+    #rsa_key = OpenSSL::PKey::RSA.new(1024)
+    #user.private_key = rsa_key.to_pem
+    #user.public_key = rsa_key.public_key.to_pem
+
+    main_key = OpenSSL::PKey::EC.new('secp256k1').generate_key
+    user.private_key = main_key.to_pem
+    pkey = OpenSSL::PKey::EC.new(main_key.public_key.group)
+    pkey.public_key = main_key.public_key
+    user.public_key = pkey.to_pem
   end
 
   def user_params

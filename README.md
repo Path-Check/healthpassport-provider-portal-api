@@ -47,19 +47,13 @@ x9iSOLHgdlP5DUN4Aj2cbAqF1mDmkYcwB%2Bt327U6izI84QJXVDzN1ETfFfU8%
 The certificate is the signed record that prove a patient name has taken a vaccine. It follows the format: 
 
 ```
-healthpass:typeOfHash\signature@pubKeyURL?<record as queryString>
+cred:type:version:signature:keyId:payload
 ```
 
 Example:
 
 ```
-healthpass:SHA256\XhwgTyPE+Q6EaeEY+I10PbMI3i7yP6y73/tyYcjjtLciTW
-adqjVoQ9xBrQxzVBCsu53dmA6f/kH9QFLHiRpa+SGe3+fjMLQrT5r19rEYYewA0P
-WFMNRUg3uYsxvaYTaK7ZuMKypR1BDE1jFUkYlbcf15/yM2CBf1Msx5+tc5qv0=
-@vitorpamplona.com/vaccine-certificate-qrcode-generator/pub_key?
-date=2020-11-27T15:19:55.682Z&vaccinee=Vitor%20Fernando%20Pamplona
-&vaccinator=CVS%20Minute%20Clinics&manuf=Pfizer&name=COVID19&lot=1221
-&route=Intramuscular&site=Right%20arm&dose=1.0
+CRED:BADGE:2:GBCQEIDQNJCG24PNXCQWTQT32KNMQ2XGKQK7OOYX4JD7L5OOE23VD4QEUQBCCAFKSZ66XEW4LZXUV35IPKXNIE32EC3L4DZJAC54XIC5FSUZEVDBHM:KEYS.PATHCHECK.ORG:20210309/MODERNA/COVID19/012L20A/28/HVNUCABMF72UT32M7FQA4M7NQSMXHMMIKFB44M7Z7QV2VFRMZ66A/C28161/RA/500//
 ```
 
 ## Features / TO-DO List
