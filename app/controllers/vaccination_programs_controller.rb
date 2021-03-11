@@ -79,7 +79,7 @@ class VaccinationProgramsController < ApplicationController
       "/" \
       "/#{CGI.escape(vac_prog.route&.upcase || '')}" \
       "/" \
-      "/#{CGI.escape(vac_prog.dose&.upcase || '')}"
+      "/#{CGI.escape(vac_prog.dose&.upcase || '')}"\
       "/#{CGI.escape(vaccinee&.upcase || '')}" \
       "/"
   end
