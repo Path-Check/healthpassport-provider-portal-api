@@ -75,10 +75,13 @@ class VaccinationProgramsController < ApplicationController
       "/#{CGI.escape(vac_prog.brand&.upcase || '')}" \
       "/#{CGI.escape(vac_prog.product&.upcase || '')}" \
       "/#{CGI.escape(vac_prog.lot&.upcase || '')}" \
-      "/#{vac_prog.required_doses}"\
-      "/#{CGI.escape(vaccinee&.upcase || '')}" \
+      "/#{vac_prog.required_doses}" \
+      "/" \
       "/#{CGI.escape(vac_prog.route&.upcase || '')}" \
+      "/" \
       "/#{CGI.escape(vac_prog.dose&.upcase || '')}"
+      "/#{CGI.escape(vaccinee&.upcase || '')}" \
+      "/"
   end
 
   def rm_pad(base32text)
