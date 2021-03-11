@@ -72,15 +72,15 @@ class VaccinationProgramsController < ApplicationController
 
   def certificate_message(vac_prog, vaccinee)
     "#{Time.now.strftime('%Y%m%d')}" \
-      "/#{CGI.escape(vac_prog.brand&.upcase || '')}" \
-      "/#{CGI.escape(vac_prog.product&.upcase || '')}" \
-      "/#{CGI.escape(vac_prog.lot&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.brand&.upcase || '').gsub(/\+/, '%20')}" \
+      "/#{CGI.escape(vac_prog.product&.upcase || '').gsub(/\+/, '%20')}" \
+      "/#{CGI.escape(vac_prog.lot&.upcase || '').gsub(/\+/, '%20')}" \
       "/#{vac_prog.required_doses}" \
       "/" \
-      "/#{CGI.escape(vac_prog.route&.upcase || '')}" \
+      "/#{CGI.escape(vac_prog.route&.upcase || '').gsub(/\+/, '%20')}" \
       "/" \
-      "/#{CGI.escape(vac_prog.dose&.upcase || '')}"\
-      "/#{CGI.escape(vaccinee&.upcase.gsub('+', '%20') || '')}" \
+      "/#{CGI.escape(vac_prog.dose&.upcase || '').gsub(/\+/, '%20')}"\
+      "/#{CGI.escape(vaccinee&.upcase || '').gsub(/\+/, '%20')}" \
       "/"
   end
 
@@ -101,6 +101,7 @@ class VaccinationProgramsController < ApplicationController
 
   def signed_public_certificate(vac_prog, vaccinee)
     message = certificate_message(vac_prog, vaccinee)
+    puts message
     signature = ''
 
     api_url = Rails.env.production? ? 'healthpassport-api.vitorpamplona.com' : 'localhost:3000'
